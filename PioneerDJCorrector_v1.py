@@ -9,6 +9,9 @@ def check_ffmpeg():
     if shutil.which("ffmpeg") is None:
         install_ffmpeg()
 
+def im_done():
+    input("The script has ended its job, you can take you FLaShDrivE, press enter to close me :) byeeee...... (any feedback is welcome)")
+
 def install_ffmpeg():
     system = platform.system()
     if system == "Windows":
@@ -20,15 +23,13 @@ def install_ffmpeg():
     else:
         print("Unsupported operating system.")
 
-    # After installation, add ffmpeg path to system PATH
-    ffmpeg_path = "C:\\Program Files\\FFmpeg\\bin"  # Update this with the actual installation path
-    os.environ["PATH"] += os.pathsep + ffmpeg_path
 
 def check_usb_drive():
     partitions = psutil.disk_partitions(all=True)
     usb_drives = [partition.mountpoint for partition in partitions if 'removable' in partition.opts]
     if not usb_drives:
         print("No USB drives found.")
+        im_done()
         return None
     else:
         usb_drive = usb_drives[0]
@@ -46,6 +47,7 @@ def select_temp_folder():
         return temp_folder
     except Exception as e:
         print("An error occurred while creating the temporary folder:", e)
+        im_done()
         return None
 
 def smart_copytree(src, dst, symlinks=False, ignore=None):
@@ -71,6 +73,7 @@ def smart_copytree(src, dst, symlinks=False, ignore=None):
 def convert_audio(input_file, output_folder):
     if shutil.which("ffmpeg") is None:
         print("ffmpeg not found. Please ensure it is installed and added to the system PATH.")
+        im_done()
         return
     
     # Ensure the output folder exists
@@ -85,7 +88,8 @@ def process_usb_drive(usb_drive):
     contents_dir = os.path.join(usb_drive, "Contents")
     temp_folder = select_temp_folder()
     if temp_folder is None:
-        print("Invalid temporary folder. Exiting...")
+        print("Invalid temporary folder.")
+        im_done()
         return
     
     temp_contents_dir = os.path.join(temp_folder, "Contents")
@@ -97,6 +101,7 @@ def process_usb_drive(usb_drive):
         shutil.copytree(contents_dir, temp_contents_dir)
     except Exception as e:
         print("An error occurred while copying 'Contents' directory:", e)
+        im_done()
         return
     
     print("Converting audio files...")
@@ -121,16 +126,11 @@ def process_usb_drive(usb_drive):
     if delete_temp_folder == "yes":
         shutil.rmtree(temp_folder)
         print("Temporary folder deleted.")
+        im_done()
     else:
         print("Temporary folder not deleted.")
+        im_done()
 
-    # Prompt user to delete the temporary folder
-    delete_temp_folder = input("Delete temporary folder? (yes/no): ").strip().lower()
-    if delete_temp_folder == "yes":
-        shutil.rmtree(temp_folder)
-        print("Temporary folder deleted.")
-    else:
-        print("Temporary folder not deleted.")
 
 
 def main():
