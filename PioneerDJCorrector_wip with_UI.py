@@ -6,13 +6,16 @@ import psutil
 import tempfile
 from tqdm import tqdm
 import re
+import threading
+import tkinter as tk
+from tkinter import messagebox, scrolledtext
 
 def check_ffmpeg():
     if shutil.which("ffmpeg") is None:
         install_ffmpeg()
 
 def im_done():
-    input("The script has ended its job, you can take you FLaShDrivE, press enter to close me :) byeeee...... (any feedback is welcome)")
+    messagebox.showinfo("Done", "The script has ended its job. You can take your Flash Drive. Bye!")
 
 def install_ffmpeg():
     system = platform.system()
@@ -23,29 +26,28 @@ def install_ffmpeg():
     elif system == "Darwin":
         subprocess.run(["brew", "install", "ffmpeg"])
     else:
-        print("Unsupported operating system.")
+        log_message("Unsupported operating system.")
 
 def check_usb_drive():
     partitions = psutil.disk_partitions(all=True)
     usb_drives = [partition.mountpoint for partition in partitions if 'removable' in partition.opts]
     if not usb_drives:
-        print("No USB drives found.")
+        log_message("No USB drives found.")
         im_done()
         return None
     else:
         usb_drive = usb_drives[0]
         usb_drive_size = shutil.disk_usage(usb_drive)
-        print(f"USB drive found: {usb_drive} ({usb_drive_size.free / (1024 ** 3):.2f} GB free)")
+        log_message(f"USB drive found: {usb_drive} ({usb_drive_size.free / (1024 ** 3):.2f} GB free)")
         return usb_drive
 
 def select_temp_folder():
     try:
-        # Create a temporary folder in the script's directory
         temp_folder = tempfile.mkdtemp(dir=os.path.dirname(os.path.abspath(__file__)))
-        print("Temporary folder created at:", temp_folder)
+        log_message(f"Temporary folder created at: {temp_folder}")
         return temp_folder
     except Exception as e:
-        print("An error occurred while creating the temporary folder:", e)
+        log_message(f"An error occurred while creating the temporary folder: {e}")
         im_done()
         return None
 
@@ -73,17 +75,12 @@ def smart_copytree(src, dst, symlinks=False, ignore=None):
 
 def convert_audio(input_file, output_folder):
     if shutil.which("ffmpeg") is None:
-        print("ffmpeg not found. Please ensure it is installed and added to the system PATH.")
+        log_message("ffmpeg not found. Please ensure it is installed and added to the system PATH.")
         im_done()
         return
 
-    # Ensure the output folder exists
     os.makedirs(output_folder, exist_ok=True)
-
-    # Output file will have the same name as the input file
     output_file = os.path.join(output_folder, os.path.basename(input_file))
-
-    # Get the duration of the input file
     result = subprocess.run(
         ["ffmpeg", "-i", input_file],
         stderr=subprocess.PIPE,
@@ -117,34 +114,31 @@ def process_usb_drive(usb_drive):
     contents_dir = os.path.join(usb_drive, "Contents")
     temp_folder = select_temp_folder()
     if temp_folder is None:
-        print("Invalid temporary folder.")
+        log_message("Invalid temporary folder.")
         im_done()
         return
     temp_contents_dir = os.path.join(temp_folder, "Contents")
-    print("Copying 'Contents' directory from USB drive to temporary folder...")
+    log_message("Copying 'Contents' directory from USB drive to temporary folder...")
     try:
         if os.path.exists(temp_contents_dir):
-            shutil.rmtree(temp_contents_dir)  # Remove the directory if it already exists
+            shutil.rmtree(temp_contents_dir)
         smart_copytree(contents_dir, temp_contents_dir)
     except Exception as e:
-        print("An error occurred while copying 'Contents' directory:", e)
+        log_message(f"An error occurred while copying 'Contents' directory: {e}")
         im_done()
         return
-    print("Converting audio files...")
+    log_message("Converting audio files...")
     for root, dirs, files in os.walk(temp_contents_dir):
         for file in files:
             if file.lower().endswith((".wav", ".aif", ".flac")):
                 input_file = os.path.join(root, file)
-                # Calculate the relative path within the temporary directory
                 relative_path = os.path.relpath(root, temp_contents_dir)
-                # Set the output folder correctly
                 relative_output_folder = os.path.join(usb_drive, "Contents", relative_path)
                 convert_audio(input_file, relative_output_folder)
                 os.remove(input_file)
-    print("Conversion completed.")
-    # Prompt user to delete the temporary folder
+    log_message("Conversion completed.")
     shutil.rmtree(temp_folder)
-    print("Temporary folder deleted.")
+    log_message("Temporary folder deleted.")
     im_done()
 
 def main():
@@ -153,5 +147,21 @@ def main():
     if usb_drive:
         process_usb_drive(usb_drive)
 
+def log_message(message):
+    log_area.insert(tk.END, message + '\n')
+    log_area.yview(tk.END)
+
+def start_process():
+    threading.Thread(target=main).start()
+
 if __name__ == "__main__":
-    main()
+    root = tk.Tk()
+    root.title("USB Audio Converter")
+
+    start_button = tk.Button(root, text="Start", command=start_process)
+    start_button.pack(pady=10)
+
+    log_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=50, height=20)
+    log_area.pack(padx=10, pady=10)
+
+    root.mainloop()
