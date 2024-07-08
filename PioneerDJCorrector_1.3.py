@@ -56,7 +56,7 @@ def smart_copytree(src, dst, symlinks=False, ignore=None):
         os.makedirs(dst)
     errors = []
     total_files = sum([len(files) for r, d, files in os.walk(src)])
-    with tqdm(total=total_files, desc="Copying files", unit="file") as pbar:
+    with tqdm(total=total_files, desc="Copying files", unit="file", bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} | {elapsed}<{remaining} | {rate_fmt}") as pbar:
         for root, dirs, files in os.walk(src):
             relative_path = os.path.relpath(root, src)
             dest_dir = os.path.join(dst, relative_path)
@@ -162,7 +162,7 @@ def process_usb_drive(usb_drive):
         and os.path.basename(file) not in pioneerdj_data
     )
 
-    with tqdm(total=total_files, desc="Overall progress", unit="file") as overall_pbar:
+    with tqdm(total=total_files, desc="Overall progress", unit="file", bar_format="{l_bar}{bar} | {n_fmt}/{total_fmt} | {elapsed}<{remaining} | {rate_fmt}") as overall_pbar:
         for root, dirs, files in os.walk(temp_contents_dir):
             for file in files:
                 if file.lower().endswith((".wav", ".aif", ".flac")):
@@ -178,7 +178,7 @@ def process_usb_drive(usb_drive):
                     relative_path = os.path.relpath(root, temp_contents_dir)
                     # Set the output folder correctly
                     relative_output_folder = os.path.join(usb_drive, "Contents", relative_path)
-                    overall_pbar.set_description(f"Converting {file}")
+                    overall_pbar.set_description(f"Converting files: {overall_pbar.n}/{overall_pbar.total} - {file}")
                     convert_audio(input_file, relative_output_folder, updated_pioneerdj_data)
                     os.remove(input_file)
                     overall_pbar.update(1)
