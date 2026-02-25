@@ -1,0 +1,55 @@
+---
+description: Code quality rules – typing, linting, no bloat, no duplication, error handling, performance
+globs: "**/*.py"
+alwaysApply: false
+---
+
+# Code Quality
+
+## No Comments in Code
+
+- Code must be self-explanatory through clear naming, small scopes, and obvious control flow
+- Replace comments with better function names, variables, or helpers
+- Record rationale in `docs/technical_decisions.md`, not source files
+
+## Linting and Formatting
+
+- Formatter and linter must be run automatically on every change
+- Fix all warnings and errors. Never disable rules unless documented in `technical_decisions.md`
+
+## Strict Typing
+
+- Use precise types, generics, and discriminated unions. Never use `any` or weak types
+- Prefer type guards and exhaustiveness checks
+- Public APIs must always have full types
+
+## No Code Bloat
+
+- Code should be lean and purposeful. Remove obsolete code promptly
+- Avoid speculative abstractions. Keep dependencies minimal and justified
+
+## No Duplication of Logic
+
+- Extract shared utilities or components for similar behavior
+- Favor DRY across modules, styles, and config
+- Refactor toward a single source of truth
+
+## No Unnecessary Files
+
+- Do not add placeholder files or throwaway debug artifacts
+- Temporary helpers must be removed immediately after use
+
+## Single Responsibility and Clear Boundaries
+
+- Ensure each module/component does one thing well
+- Separate domain logic, presentation, configuration, and side-effects
+
+## Explicit Error Handling
+
+- Handle errors explicitly where they occur; return useful error data to callers
+- Avoid silent failures. Validate all inputs. Keep error messages concise
+
+## Performance by Design
+
+- Avoid unnecessary renders or allocations. Use efficient data structures. Cache if appropriate
+- Measure before further optimizations

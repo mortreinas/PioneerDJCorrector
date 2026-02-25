@@ -2,3 +2,13 @@ build/
 dist/
 *.spec
 .idea
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.egg-info/
+.eggs/
+versions/
+PioneerDJCorrector_wip.py

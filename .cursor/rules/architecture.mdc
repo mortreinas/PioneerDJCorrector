@@ -1,0 +1,21 @@
+---
+description: Architecture and configuration – centralize config, naming, boundaries, backward compatibility
+alwaysApply: false
+---
+
+# Architecture
+
+## Centralize Configuration and Globals
+
+- Keep shared constants and settings in a single file/folder
+- Never hardcode values – always reference config tokens
+
+## Consistent Architecture and Naming
+
+- Follow folder structure, naming conventions, and module boundaries
+- Keep public APIs stable and documented
+
+## Backward Compatibility
+
+- Document migration notes in `docs/technical_decisions.md` when changing public interfaces
+- Consider deprecation windows and add adapters where feasible

@@ -1,0 +1,21 @@
+---
+description: Documentation standards – docs/, README, technical decisions, translations
+alwaysApply: false
+---
+
+# Documentation
+
+## Documentation in docs/
+
+- Maintain `docs/project.md` for description and `docs/technical_decisions.md` for architectural choices
+- Document every non-obvious decision with context, date, and rationale
+
+## README Contents
+
+- README.md should only include a short project description, how to run/build, and how to develop
+- Put deeper details in `docs/project.md` and `docs/technical_decisions.md`
+
+## Translations Belong in Their Own Place
+
+- Store translations/i18n in a dedicated folder with namespace keys
+- Do not inline user-facing text in code

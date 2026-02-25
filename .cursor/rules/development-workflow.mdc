@@ -1,0 +1,46 @@
+---
+description: Development workflow – propose before building, tech choices, dependencies, testing, PR readiness
+alwaysApply: false
+---
+
+# Development Workflow
+
+## Run Commands in Bulk
+
+- Prefer chained scripts (e.g., `npm run format && npm run lint` or `ruff format . && ruff check .`)
+- Add combined scripts if missing
+
+## Propose and Research Before Building
+
+- Outline options and research tradeoffs before any feature or major change
+- Never implement solutions known to fail; consult users first
+
+## Technology Choices Come with Options
+
+- Always present at least two tech/library options with pros, cons, and constraints
+- Justify your choice and note exit strategies
+
+## Dependencies Must Be Current
+
+- Prefer actively maintained packages
+- Identify outdated/deprecated dependencies, propose upgrades, and remove unused packages
+
+## Testing Policy
+
+- Only add tests that provide real value and fit existing conventions
+- Avoid unused scaffolding
+
+## Security and Privacy Basics
+
+- Never log secrets. Validate all untrusted inputs
+- Document assumptions and risks for auth/data
+
+## Observability Without Clutter
+
+- Use logging and metrics utilities purposefully
+- Remove excessive logs once stable
+
+## PR and Review Readiness
+
+- Produce focused PRs/commits with intent, scope, and risks
+- All code must pass format, lint, type checks, and tests before review

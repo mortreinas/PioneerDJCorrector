@@ -1,0 +1,24 @@
+---
+description: Core coding standards for PioneerDJCorrector. Clean code, modular design, and careful editing.
+alwaysApply: true
+---
+
+# Core Standards
+
+Coding standards for the PioneerDJCorrector project. All code must adhere to these principles for consistency, maintainability, and quality.
+
+## Clean, Reusable, Modular Code
+
+- Organize code in small, single-purpose functions and components with clear names
+- Prefer composition over inheritance
+- Reuse utilities and patterns. New code should be generic enough to be reused
+
+## Edit Carefully
+
+- Read and understand files before editing
+- Preserve working behavior unless change is agreed
+- Refactor in minimal, focused changes
+
+## Adherence
+
+Adhere to all rules on every task. If a rule must be broken, explicitly call out why and record rationale/impact in `docs/technical_decisions.md`.

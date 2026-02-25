@@ -1,0 +1,136 @@
+# DEPRECATED: Migrated to .cursor/rules/
+# These rules have been migrated to Project Rules. See .cursor/rules/ for the current rules.
+# This file is kept for reference only and can be removed.
+
+project_name: PioneerDJCorrector
+
+description: >
+  Coding standards for the PioneerDJCorrector project.
+  All code must adhere to these principles for consistency, maintainability, and quality.
+
+rules:
+  - name: Clean, Reusable, Modular Code
+    description: >
+      All code should be organized in small, single-purpose functions and components with clear names.
+      Prefer composition over inheritance. Reuse utilities and patterns. New code should be generic enough to be reused.
+
+  - name: No Comments in Code
+    description: >
+      Code must be self-explanatory through clear naming, small scopes, and obvious control flow.
+      Replace comments with better function names, variables, or helpers.
+      Record rationale in docs/technical_decisions.md, not source files.
+
+  - name: Linting and Formatting
+    description: >
+      Formatter and linter must be run automatically on every change.
+      Fix all warnings and errors. Never disable rules unless documented in technical_decisions.md.
+
+  - name: Strict Typing
+    description: >
+      Use precise types, generics, and discriminated unions. Never use "any" or weak types.
+      Prefer type guards and exhaustiveness checks.
+      Public APIs must always have full types.
+
+  - name: No Code Bloat
+    description: >
+      Code should be lean and purposeful. Remove obsolete code promptly.
+      Avoid speculative abstractions. Keep dependencies minimal and justified.
+
+  - name: No Duplication of Logic
+    description: >
+      Extract shared utilities or components for similar behavior. Favor DRY across modules, styles, and config.
+      Refactor toward a single source of truth.
+
+  - name: No Unnecessary Files
+    description: >
+      Do not add placeholder files or throwaway debug artifacts.
+      Temporary helpers must be removed immediately after use.
+
+  - name: Centralize Configuration and Globals
+    description: >
+      Keep shared constants and settings in a single file/folder.
+      Never hardcode values – always reference config tokens.
+
+  - name: Translations Belong in Their Own Place
+    description: >
+      Store translations/i18n in a dedicated folder with namespace keys.
+      Do not inline user-facing text in code.
+
+  - name: Documentation in docs/
+    description: >
+      Maintain docs/project.md for description and docs/technical_decisions.md for architectural choices.
+      Document every non-obvious decision with context, date, and rationale.
+
+  - name: README Contents
+    description: >
+      README.md should only include a short project description, how to run/build, and how to develop.
+      Put deeper details in docs/project.md and docs/technical_decisions.md.
+
+  - name: Run Commands in Bulk
+    description: >
+      Prefer chained scripts (e.g., npm run format && npm run lint). Add combined scripts if missing.
+
+  - name: Edit Carefully
+    description: >
+      Read and understand files before editing. Preserve working behavior unless change is agreed.
+      Refactor in minimal, focused changes.
+
+  - name: Propose and Research Before Building
+    description: >
+      Outline options and research tradeoffs before any feature or major change.
+      Never implement solutions known to fail; consult users first.
+
+  - name: Technology Choices Come with Options
+    description: >
+      Always present at least two tech/library options with pros, cons, and constraints.
+      Justify your choice and note exit strategies.
+
+  - name: Dependencies Must Be Current
+    description: >
+      Prefer actively maintained packages. Identify outdated/deprecated dependencies, propose upgrades, and remove unused packages.
+
+  - name: Consistent Architecture and Naming
+    description: >
+      Follow folder structure, naming conventions, and module boundaries.
+      Keep public APIs stable and documented.
+
+  - name: Single Responsibility and Clear Boundaries
+    description: >
+      Ensure each module/component does one thing well.
+      Separate domain logic, presentation, configuration, and side-effects.
+
+  - name: Explicit Error Handling
+    description: >
+      Handle errors explicitly where they occur; return useful error data to callers.
+      Avoid silent failures. Validate all inputs. Keep error messages concise.
+
+  - name: Performance by Design
+    description: >
+      Avoid unnecessary renders or allocations. Use efficient data structures. Cache if appropriate.
+      Measure before further optimizations.
+
+  - name: Testing Policy
+    description: >
+      Only add tests that provide real value and fit existing conventions. Avoid unused scaffolding.
+
+  - name: Backward Compatibility
+    description: >
+      Document migration notes in docs/technical_decisions.md when changing public interfaces.
+      Consider deprecation windows and add adapters where feasible.
+
+  - name: Security and Privacy Basics
+    description: >
+      Never log secrets. Validate all untrusted inputs. Document assumptions and risks for auth/data.
+
+  - name: Observability Without Clutter
+    description: >
+      Use logging and metrics utilities purposefully. Remove excessive logs once stable.
+
+  - name: PR and Review Readiness
+    description: >
+      Produce focused PRs/commits with intent, scope, and risks.
+      All code must pass format, lint, type checks, and tests before review.
+
+adherence: >
+  Adhere to all rules on every task.
+  If a rule must be broken, explicitly call out why and record rationale/impact in docs/technical_decisions.md.
